@@ -12,6 +12,9 @@ const client = new Client({
   ],
 });
 const TOKEN = process.env.DISCORD_BOT_TOKEN;
+const JOIN_LEAVE_CHANNEL_NAME =
+  process.env.JOIN_LEAVE_CHANNEL_NAME || "default-channel-name";
+
 client.commands = new Collection();
 client.cooldowns = new Collection();
 
@@ -51,20 +54,20 @@ function handleIncomingMessage(message) {
 
 client.on("guildMemberAdd", (member) => {
   const channel = member.guild.channels.cache.find(
-    (ch) => ch.name === "「✨」︱joins-leaves"
-  ); // You can replace '「✨」︱joins-leaves' with the name of the channel you want.
+    (ch) => ch.name === JOIN_LEAVE_CHANNEL_NAME
+  );
 
-  if (!channel) return; // If the channel is not found, do nothing.
+  if (!channel) return;
 
   channel.send(`Welcome ${member} to the server!`);
 });
 
 client.on("guildMemberRemove", (member) => {
   const channel = member.guild.channels.cache.find(
-    (ch) => ch.name === "「✨」︱joins-leaves"
-  ); // You can replace '「✨」︱joins-leaves' with the name of the channel you want.
+    (ch) => ch.name === JOIN_LEAVE_CHANNEL_NAME
+  );
 
-  if (!channel) return; // If the channel is not found, do nothing.
+  if (!channel) return;
 
   channel.send(`${member} has left the server.`);
 });
