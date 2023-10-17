@@ -1,4 +1,3 @@
-// dice.js
 module.exports = {
     name: 'dice',
     description: 'Rolls a 6-sided dice and displays the outcome.',

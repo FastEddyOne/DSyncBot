@@ -7,7 +7,7 @@ module.exports = {
         const pollQuestion = args.join(' ');
 
         const pollMessage = await message.channel.send(`📊 **Poll:** ${pollQuestion}`);
-        
+
         // Add reactions for voting
         await pollMessage.react('👍');  // thumbs up for yes
         await pollMessage.react('👎');  // thumbs down for no

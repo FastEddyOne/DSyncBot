@@ -6,7 +6,7 @@ module.exports = {
         if (!args.length) {
             return message.reply('You didn\'t provide any message to say!');
         }
-        
+
         message.channel.send(args.join(' '));
     },
 };

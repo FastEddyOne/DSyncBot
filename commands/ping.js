@@ -1,4 +1,3 @@
-// ping.js
 module.exports = {
     name: 'ping',
     description: 'Ping command',
