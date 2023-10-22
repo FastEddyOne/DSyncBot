@@ -54,6 +54,9 @@ client.once("ready", () => {
 client.on("interactionCreate", async (interaction) => {
   if (!interaction.isCommand()) return;
 
+  // Acknowledge the interaction immediately.
+  await interaction.deferReply();
+
   const command = client.commands.get(interaction.commandName);
   if (!command) return;
 
@@ -61,7 +64,9 @@ client.on("interactionCreate", async (interaction) => {
     await command.execute(interaction);
   } catch (error) {
     console.error(`Error executing command ${interaction.commandName} for user ${interaction.user.tag} in guild ${interaction.guild.name}:`, error);
-    await interaction.reply({ content: 'There was an error executing the command!', ephemeral: true });
+
+    // Since you've already deferred the reply, you need to edit the reply instead of sending a new one.
+    await interaction.editReply({ content: 'There was an error executing the command!', ephemeral: true });
   }
 });
 

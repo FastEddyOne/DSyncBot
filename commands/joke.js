@@ -10,6 +10,6 @@ module.exports = {
     description: 'Shares a random joke.',
     async execute(interaction) {
         const randomJoke = jokes[Math.floor(Math.random() * jokes.length)];
-        await interaction.reply(`😂 Joke: ${randomJoke}`);
+        await interaction.editReply(`😂 Joke: ${randomJoke}`);
     },
 };

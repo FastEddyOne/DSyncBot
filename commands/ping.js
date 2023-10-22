@@ -3,6 +3,6 @@ module.exports = {
     description: 'Ping command',
     cooldown: 5,
     async execute(interaction) {
-        await interaction.reply('Pong!');
+        await interaction.editReply('Pong!');
     },
 };

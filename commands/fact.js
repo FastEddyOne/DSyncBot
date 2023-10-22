@@ -10,6 +10,6 @@ module.exports = {
     description: 'Shares a random fact.',
     async execute(interaction) {
         const randomFact = facts[Math.floor(Math.random() * facts.length)];
-        await interaction.reply(`📚 Fact: ${randomFact}`);
+        await interaction.editReply(`📚 Fact: ${randomFact}`);
     },
 };
