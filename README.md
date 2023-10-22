@@ -6,13 +6,7 @@ DSyncBot is a Discord bot designed to provide interactive commands for server me
 
 Basic Commands:
 
-- /say [message]: Repeats the message sent by the user.
 - /dice: Rolls a dice and displays the outcome.
-- /kick [username] [reason]: Allows moderators to kick a user with an optional reason.
-- /ban [username] [reason]: Allows moderators to ban a user with an optional reason.
-- /mute [username] [duration]: Mutes a user for a specified duration.
-- /poll [question]: Initiates a poll where users can vote using reactions.
-- /reminder [duration] [message]: Sets a reminder for the user and pings them after the specified duration.
 - /fact: Shares a random fact.
 - /joke: Shares a random joke.
 - /ping: The bot will respond with "Pong!".
