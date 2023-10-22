@@ -20,13 +20,16 @@ async function registerCommands() {
     .readdirSync("./commands")
     .filter((file) => file.endsWith(".js"));
 
-  for (const file of commandFiles) {
-    const command = require(`./commands/${file}`);
-    commands.push({
-      name: command.name,
-      description: command.description, // Assuming your command files have a description
-      options: command.options || [] // Assuming you may have command options
-    });
+    for (const file of commandFiles) {
+      const command = require(`./commands/${file}`);
+      commands.push({
+        name: command.name,
+        description: command.description, // Assuming your command files have a description
+        options: command.options || [] // Assuming you may have command options
+      });
+  
+      // This line adds the command to the client's command collection
+      client.commands.set(command.name, command);
   }
 
   const rest = new REST({ version: '10' }).setToken(TOKEN);
@@ -52,23 +55,26 @@ client.once("ready", () => {
 });
 
 client.on("interactionCreate", async (interaction) => {
+  console.log('Received interaction:', interaction.commandName); // Add this
   if (!interaction.isCommand()) return;
 
-  // Acknowledge the interaction immediately.
   await interaction.deferReply();
 
   const command = client.commands.get(interaction.commandName);
-  if (!command) return;
+  if (!command) {
+    console.log('Command not found in collection:', interaction.commandName); // Add this
+    return;
+  }
 
   try {
+    console.log('Attempting to execute command:', command.name); // Add this
     await command.execute(interaction);
   } catch (error) {
     console.error(`Error executing command ${interaction.commandName} for user ${interaction.user.tag} in guild ${interaction.guild.name}:`, error);
-
-    // Since you've already deferred the reply, you need to edit the reply instead of sending a new one.
     await interaction.editReply({ content: 'There was an error executing the command!', ephemeral: true });
   }
 });
+
 
 // Note: Cooldowns and role restrictions can be handled in the interactionCreate similar to the given code.
 
