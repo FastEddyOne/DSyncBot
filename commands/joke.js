@@ -8,8 +8,8 @@ const jokes = [
 module.exports = {
     name: 'joke',
     description: 'Shares a random joke.',
-    execute(message) {
+    async execute(interaction) {
         const randomJoke = jokes[Math.floor(Math.random() * jokes.length)];
-        message.channel.send(`😂 Joke: ${randomJoke}`);
+        await interaction.reply(`😂 Joke: ${randomJoke}`);
     },
 };

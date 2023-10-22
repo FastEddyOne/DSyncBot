@@ -1,8 +1,8 @@
 module.exports = {
     name: 'dice',
     description: 'Rolls a 6-sided dice and displays the outcome.',
-    execute(message) {
+    async execute(interaction) {
         const outcome = Math.floor(Math.random() * 6) + 1;
-        message.channel.send(`🎲 You rolled a ${outcome}!`);
+        await interaction.reply(`🎲 You rolled a ${outcome}!`);
     },
 };

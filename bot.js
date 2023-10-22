@@ -1,8 +1,7 @@
 require("dotenv").config();
 const fs = require("fs");
-const { Client, GatewayIntentBits, Collection } = require("discord.js");
+const { Client, GatewayIntentBits, Collection, REST, Routes } = require("discord.js");
 
-// Bot Initialization
 const client = new Client({
   intents: [
     GatewayIntentBits.Guilds,
@@ -11,120 +10,62 @@ const client = new Client({
   ],
 });
 const TOKEN = process.env.DISCORD_BOT_TOKEN;
-const JOIN_LEAVE_CHANNEL_NAME =
-  process.env.JOIN_LEAVE_CHANNEL_NAME || "default-channel-name";
 
 client.commands = new Collection();
 client.cooldowns = new Collection();
 
-// Load Commands
-function loadCommands() {
+async function registerCommands() {
+  const commands = [];
   const commandFiles = fs
     .readdirSync("./commands")
     .filter((file) => file.endsWith(".js"));
 
   for (const file of commandFiles) {
     const command = require(`./commands/${file}`);
-    console.log(`Loading command: ${command.name}`);
-    client.commands.set(command.name, command);
+    commands.push({
+      name: command.name,
+      description: command.description, // Assuming your command files have a description
+      options: command.options || [] // Assuming you may have command options
+    });
+  }
+
+  const rest = new REST({ version: '10' }).setToken(TOKEN);
+  
+  try {
+    console.log('Started refreshing application (/) commands.');
+
+    // Register commands globally (you can also register them per guild, refer Discord.js guide)
+    await rest.put(
+      Routes.applicationCommands(client.user.id),
+      { body: commands },
+    );
+
+    console.log('Successfully reloaded application (/) commands.');
+  } catch (error) {
+    console.error(error);
   }
 }
 
-// Event Handlers
 client.once("ready", () => {
   console.log("Bot is online!");
+  registerCommands(); // Register the slash commands when the bot starts
 });
 
-client.on("messageCreate", handleIncomingMessage);
+client.on("interactionCreate", async (interaction) => {
+  if (!interaction.isCommand()) return;
 
-function handleIncomingMessage(message) {
-  console.log(
-    `Received message: ${message.content} from ${message.author.username}`
-  );
+  const command = client.commands.get(interaction.commandName);
+  if (!command) return;
 
-  if (!message.content.startsWith("/") || message.author.bot) return;
-
-  const args = message.content.slice(1).trim().split(/ +/);
-  const commandName = args.shift().toLowerCase();
-  console.log(`Processed command: /${commandName}`);
-
-  executeCommand(message, commandName, args);
-}
-
-client.on("guildMemberAdd", (member) => {
-  const channel = member.guild.channels.cache.find(
-    (ch) => ch.name === JOIN_LEAVE_CHANNEL_NAME
-  );
-
-  if (!channel) return;
-
-  channel.send(`Welcome ${member} to the server!`);
-});
-
-client.on("guildMemberRemove", (member) => {
-  const channel = member.guild.channels.cache.find(
-    (ch) => ch.name === JOIN_LEAVE_CHANNEL_NAME
-  );
-
-  if (!channel) return;
-
-  channel.send(`${member} has left the server.`);
-});
-
-function executeCommand(message, commandName, args) {
-  const command = client.commands.get(commandName);
-
-  if (!command) {
-    console.log(`Command ${commandName} not found.`);
-    return;
-  }
-
-  // Role-based restriction
-  if (
-    commandName === "restrictedCommandName" &&
-    !message.member.roles.cache.some((role) => role.name === "Moderator")
-  ) {
-    return message.reply("You can't use this command!");
-  }
-
-  // Cooldown handling
-  handleCooldowns(command, message);
-
-  // Execute the command
   try {
-    command.execute(message, args);
+    await command.execute(interaction);
   } catch (error) {
-    console.error(`Error executing command ${commandName}:`, error);
-    message.reply("There was an error trying to execute that command!");
+    console.error(`Error executing command ${interaction.commandName} for user ${interaction.user.tag} in guild ${interaction.guild.name}:`, error);
+    await interaction.reply({ content: 'There was an error executing the command!', ephemeral: true });
   }
-}
+});
 
-function handleCooldowns(command, message) {
-  if (!client.cooldowns.has(command.name)) {
-    client.cooldowns.set(command.name, new Collection());
-  }
-
-  const now = Date.now();
-  const timestamps = client.cooldowns.get(command.name);
-  const cooldownAmount = (command.cooldown || 5) * 1000;
-
-  if (timestamps.has(message.author.id)) {
-    const expirationTime = timestamps.get(message.author.id) + cooldownAmount;
-
-    if (now < expirationTime) {
-      const timeLeft = (expirationTime - now) / 1000;
-      return message.reply(
-        `Please wait ${timeLeft.toFixed(
-          1
-        )} more second(s) before reusing the \`${command.name}\` command.`
-      );
-    }
-  }
-
-  timestamps.set(message.author.id, now);
-  setTimeout(() => timestamps.delete(message.author.id), cooldownAmount);
-}
+// Note: Cooldowns and role restrictions can be handled in the interactionCreate similar to the given code.
 
 // Start Bot
-loadCommands();
 client.login(TOKEN);

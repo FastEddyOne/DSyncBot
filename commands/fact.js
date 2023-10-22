@@ -8,8 +8,8 @@ const facts = [
 module.exports = {
     name: 'fact',
     description: 'Shares a random fact.',
-    execute(message) {
+    async execute(interaction) {
         const randomFact = facts[Math.floor(Math.random() * facts.length)];
-        message.channel.send(`📚 Fact: ${randomFact}`);
+        await interaction.reply(`📚 Fact: ${randomFact}`);
     },
 };
