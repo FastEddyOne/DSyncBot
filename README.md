@@ -10,6 +10,8 @@ Basic Commands:
 - /fact: Shares a random fact.
 - /joke: Shares a random joke.
 - /ping: The bot will respond with "Pong!".
+- /8ball: The bot will respond with a magic 8 ball message.
+- /meme: The bot will respond with a random meme.
 
 ## Getting Started
 
