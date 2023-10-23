@@ -15,32 +15,41 @@ client.commands = new Collection();
 client.cooldowns = new Collection();
 
 async function registerCommands() {
-  const commands = [];
+  const commandsToRegister = [];
   const commandFiles = fs
     .readdirSync("./commands")
     .filter((file) => file.endsWith(".js"));
 
-    for (const file of commandFiles) {
-      const command = require(`./commands/${file}`);
-      commands.push({
-        name: command.name,
-        description: command.description, // Assuming your command files have a description
-        options: command.options || [] // Assuming you may have command options
-      });
-  
-      // This line adds the command to the client's command collection
-      client.commands.set(command.name, command);
+  for (const file of commandFiles) {
+    const command = require(`./commands/${file}`);
+    commandsToRegister.push({
+      name: command.name,
+      description: command.description,
+      options: command.options || []
+    });
+
+    // Log the command name
+    console.log(command.name);
+    
+    // This line adds the command to the client's command collection
+    client.commands.set(command.name, command);
   }
 
   const rest = new REST({ version: '10' }).setToken(TOKEN);
-  
+
+  // Delete all existing commands
+  const existingCommands = await rest.get(Routes.applicationCommands(client.user.id));
+  for (const command of existingCommands) {
+      await rest.delete(Routes.applicationCommand(client.user.id, command.id));
+  }
+
   try {
     console.log('Started refreshing application (/) commands.');
 
-    // Register commands globally (you can also register them per guild, refer Discord.js guide)
+    // Register commands globally
     await rest.put(
       Routes.applicationCommands(client.user.id),
-      { body: commands },
+      { body: commandsToRegister },
     );
 
     console.log('Successfully reloaded application (/) commands.');
