@@ -23,7 +23,7 @@ module.exports = {
                 return interaction.editReply("No meme found. Please try again.");
             }
 
-            const messageContent = `**${meme.title}**\n${meme.url}`;
+            const messageContent = `${meme.url}`;
 
             await interaction.editReply(messageContent);
         } catch (error) {
