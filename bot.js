@@ -49,7 +49,11 @@ async function registerCommands() {
     // Register commands globally
     await rest.put(
       Routes.applicationCommands(client.user.id),
-      { body: commandsToRegister },
+      { body: client.commands.map(command => ({
+        name: command.name,
+        description: command.description,
+        options: command.options || []
+      })) },
     );
 
     console.log('Successfully reloaded application (/) commands.');
