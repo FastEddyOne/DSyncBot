@@ -12,7 +12,9 @@ Basic Commands:
 - /ping: The bot will respond with "Pong!".
 - /8ball: The bot will respond with a magic 8 ball message.
 - /meme: The bot will respond with a random meme.
-- /kick: The bot will kick the user from the discord server.
+- /kick: The bot will kick the user from the discord server. (Must be a mod or admin)
+- /ban: The bot will ban the user from the discord server. (Must be a mod or admin)
+- /mute: The bot will mute the user from the discord server. (Must be a mod or admin)
 
 ## Getting Started
 
