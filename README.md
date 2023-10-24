@@ -16,6 +16,7 @@ Basic Commands:
 - /ban: The bot will ban the user from the discord server. (Must be a mod or admin)
 - /mute: The bot will mute the user from the discord server. (Must be a mod or admin)
 - /clear: The bot will clear the channel. (Must be a mod or admin)
+- /poll: The bot will poll the channel. (Must be a mod or admin)
 
 ## Getting Started
 
