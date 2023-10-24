@@ -17,6 +17,7 @@ Basic Commands:
 - /mute: The bot will mute the user from the discord server. (Must be a mod or admin)
 - /clear: The bot will clear the channel. (Must be a mod or admin)
 - /poll: The bot will poll the channel. (Must be a mod or admin)
+- /announce: The bot will announce to a channel. (Must be a mod or admin)
 
 ## Getting Started
 
