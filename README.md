@@ -15,6 +15,7 @@ Basic Commands:
 - /kick: The bot will kick the user from the discord server. (Must be a mod or admin)
 - /ban: The bot will ban the user from the discord server. (Must be a mod or admin)
 - /mute: The bot will mute the user from the discord server. (Must be a mod or admin)
+- /clear: The bot will clear the channel. (Must be a mod or admin)
 
 ## Getting Started
 
