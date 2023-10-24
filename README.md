@@ -12,6 +12,7 @@ Basic Commands:
 - /ping: The bot will respond with "Pong!".
 - /8ball: The bot will respond with a magic 8 ball message.
 - /meme: The bot will respond with a random meme.
+- /kick: The bot will kick the user from the discord server.
 
 ## Getting Started
 
