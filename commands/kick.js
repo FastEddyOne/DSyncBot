@@ -1,4 +1,3 @@
-// kick.js
 const { CommandInteraction, Client } = require("discord.js");
 
 module.exports = {
